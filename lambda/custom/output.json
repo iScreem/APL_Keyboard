@@ -1,0 +1,66 @@
+{
+    "type": "APL",
+    "version": "1.0",
+    "theme": "dark",
+    "import": [],
+    "resources": [],
+    "styles": {},
+    "layouts": {},
+    "mainTemplate": {
+        "parameters": [
+            "payload"
+        ],
+        "items": [
+            {
+                "type": "Frame",
+                "width": "100vw",
+                "height": "100vh",
+                "backgroundColor": "gray",
+                "item": {
+                    "type": "Container",
+                    "direction": "column",
+                    "width": "100vw",
+                    "height": "100vh",
+                    "items": [
+                        {
+                            "type": "Text",
+                            "text": "Email",
+                            "color": "black",
+                            "paddingTop": "10vh",
+                            "textAlign": "center"
+                        },
+                        {
+                            "type": "Text",
+                            "text": "${payload.Keyboard.properties.email}",
+                            "textAlign": "center"
+                        },
+                        {
+                            "type": "Text",
+                            "text": "User Name",
+                            "color": "black",
+                            "paddingTop": "10vh",
+                            "textAlign": "center"
+                        },
+                        {
+                            "type": "Text",
+                            "text": "${payload.Keyboard.properties.username}",
+                            "textAlign": "center"
+                        },
+                        {
+                            "type": "Text",
+                            "text": "Gamer Tag",
+                            "color": "black",
+                            "paddingTop": "10vh",
+                            "textAlign": "center"
+                        },
+                        {
+                            "type": "Text",
+                            "text": "${payload.Keyboard.properties.gamertag}",
+                            "textAlign": "center"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
