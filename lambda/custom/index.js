@@ -9,18 +9,22 @@ const LaunchRequestHandler = {
   },
   async handle(handlerInput) {
     var sAttributes = await handlerInput.attributesManager.getSessionAttributes();
+
+    //initialize keyboardText in session attributes
     sAttributes["keyboardText"] = "";
+
     const speechText = 'Welcome to the A P L Keyboard demo. Please enter your email';
     handlerInput.attributesManager.setSessionAttributes(sAttributes);
 
 
+    //use the keyboard.json APL and pass the title(keyboard prompt) and the input (variable to capture input for)
     if (deviceHasDisplay(handlerInput)) {
       return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
       .addDirective({
         type: 'Alexa.Presentation.APL.RenderDocument',
-        document: require('./layout.json'),
+        document: require('./keyboard.json'),
         datasources: {
           "Keyboard": {
             "type": "object",
@@ -47,31 +51,53 @@ const TouchHandler = {
   },
   async handle(handlerInput) {
     var sAttributes = await handlerInput.attributesManager.getSessionAttributes();
+
+    //getting current text string being entered
     var keyboardText = sAttributes.keyboardText;
+
+    //last key pressed
     var key = handlerInput.requestEnvelope.request.arguments[2];
+
+    //the variable that the keybooard is capturing input for
     var input = handlerInput.requestEnvelope.request.arguments[1];
+
+    //add the last key pressed to the speech text
+    //instead of speaking last character pressed, could substitute an audio "click" sound or something
     var speechText = key;
 
     switch (key) {
       case "Back":
+        //backspace the last character from string
         keyboardText = keyboardText.slice(0,-1);
         break;
       case "SPACE":
+        //add a space to current text string
         keyboardText = keyboardText + " ";
         break;
       case "Enter":
+        //done entering string for current variable
+
+        //save input(variable) as session attribute
         sAttributes[input] = keyboardText;
+        //clear the current keyboard string value;
         keyboardText = "";
+
         switch (input) {
           case "email":
+            //start collecting keyboard input for username
             input = "username";
+            //set title on Keyboard APL
             speechText = " Enter user name";
             break;
           case "username":
+            //start collecting keyboard input for gamertag
             input = "gamertag";
             speechText = " Enter gamer tag";
             break;
           case "gamertag":
+            //gamertag is last variable in this example. Show APL for captured variables
+
+            //pass the output.json APL that renders the variables and pass the data
             return handlerInput.responseBuilder
               .speak("Thank you for your input")
               .addDirective({
@@ -98,6 +124,7 @@ const TouchHandler = {
         keyboardText = keyboardText + key;
     }
 
+  //set and save current keyboard text to session attributes
   sAttributes.keyboardText = keyboardText;
   handlerInput.attributesManager.setSessionAttributes(sAttributes);
 
@@ -106,7 +133,7 @@ const TouchHandler = {
     .reprompt(speechText)
     .addDirective({
       type: 'Alexa.Presentation.APL.RenderDocument',
-      document: require('./layout.json'),
+      document: require('./keyboard.json'),
       datasources: {
         "Keyboard": {
           "type": "object",
